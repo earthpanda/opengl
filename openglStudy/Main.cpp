@@ -22,7 +22,26 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "void main()\n"
 "{\n"
 "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\0";
+"}\n\0";
+
+
+//定义另外一个颜色片段着色器
+//const char* colorFragmentShaderSource = "#version 330 core\n"
+//"out vec4 FragColor;\n"
+//"void main()\n"
+//"{\n"
+//"   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+//"}\n\0";
+
+
+const char* colorFragmentShaderSource = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);\n"
+"}\n\0";
+
+;
 
 
 
@@ -101,6 +120,19 @@ int main() {
 	}
 
 
+	//进行另一个片段着色器的定义
+	unsigned int colorFragmentShader;
+	colorFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(colorFragmentShader, 1, &colorFragmentShaderSource, NULL);
+	glCompileShader(colorFragmentShader);
+
+
+	glGetShaderiv(colorFragmentShader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(colorFragmentShader, 512, NULL, infoLog);
+		std::cout << "color fragment compile failed \n " << infoLog << std::endl;
+	}
+
 	//创建program将 顶点着色器和片段着色器进行link
 	int shaderProgram;
 	shaderProgram = glCreateProgram();
@@ -115,9 +147,28 @@ int main() {
 		std::cout << "program link failed \n" << infoLog << std::endl;
 	}
 
+
+	//创建另外一个program 将顶点着色器和片段着色器进行link
+	int colorShaderProgram;
+	colorShaderProgram = glCreateProgram();
+	glAttachShader(colorShaderProgram, vertexShader);
+	glAttachShader(colorShaderProgram, colorFragmentShader);
+	glLinkProgram(colorShaderProgram);
+
+	// 检查program link error
+	glGetProgramiv(colorShaderProgram, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(colorShaderProgram, 512, NULL, infoLog);
+		std::cout << "color program link failed \n" << infoLog << std::endl;
+	}
+
+
+
 	//已经link好后 需要删除无用的着色器
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+	glDeleteShader(colorFragmentShader);
+
 
 	/*****************************************************三角形顶点数组************************************************************/
 	//float vertices[] = {
@@ -275,6 +326,8 @@ int main() {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+
+		glUseProgram(colorShaderProgram);
 		//使用VBO来进行三角形的绘制
 		glBindVertexArray(VAOS[1]);
 		glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);
@@ -300,6 +353,7 @@ int main() {
 	glDeleteBuffers(2, VBOS);
 	glDeleteBuffers(1, &IBO);
 	glDeleteProgram(shaderProgram);
+	glDeleteProgram(colorShaderProgram);
 
 
 
