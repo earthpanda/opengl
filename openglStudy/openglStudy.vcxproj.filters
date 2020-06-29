@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\getstart">
+      <UniqueIdentifier>{28833d50-d029-4852-a79b-6dee9a50abe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\getstart\shader">
+      <UniqueIdentifier>{8f579f01-4c0d-4ef0-a2b0-9d52d4d088ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -20,6 +26,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\迅雷下载\glad\src\glad.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shadercpp.cpp">
+      <Filter>Source Files\getstart\shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

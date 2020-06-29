@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\迅雷下载\glad\src\glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Shadercpp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
