@@ -43,21 +43,18 @@ public:
 			//关闭io流
 			vShaderFile.close();
 			fShaderFile.close();
-
+			//将读取的内容 转为 string
 			vertexSourceCode = vShaderStream.str();
 			fragmentSourceCode = fShaderStream.str();
-
-
-
-
-
-
 
 		}
 		catch (const std::exception&)
 		{
-
+			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
+
+
+
 
 
 	};
