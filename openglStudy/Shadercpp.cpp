@@ -12,17 +12,20 @@ void process_input(GLFWwindow* window);
 //gl_Position 这个值不能乱改 应该是内部定义的，否则会造成片段着色器无效的bug
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"out vec4 inFragColor;\n"
 "void main()\n"
 "{\n"
 "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"inFragColor = vec4(0.0f,1.0f,1.0f,0.5f);\n"
 "}\0";
 
 //判断着色器 使用string 表述 定义
 const char* fragmentShaderSource = "#version 330 core\n"
+"in vec4 inFragColor;\n"
 "out vec4 FragColor;\n"
 "void main()\n"
 "{\n"
-"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"FragColor = inFragColor;\n"
 "}\n\0";
 
 
@@ -35,15 +38,16 @@ const char* fragmentShaderSource = "#version 330 core\n"
 //"}\n\0";
 
 
+//使用uniform定义color
+//使用uniform的意义是在于这样的话 可以在program中进行相关数值的设置
+//但是需要注意的是 uniform在着色器中唯一 不能有重复
 const char* colorFragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"uniform vec4 uniColor;\n"
 "void main()\n"
 "{\n"
-"FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+"FragColor = uniColor;\n"
 "}\n\0";
-
-;
-
 
 
 int main() {
@@ -328,7 +332,15 @@ int main() {
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
+		//激活相关的program
+		//该program link 相关的fragmentShader ，且该shader中绑定了相关的 着色器语言
 		glUseProgram(colorShaderProgram);
+		float timeValue = glfwGetTime();
+		float greenColor = sin(timeValue) / 2 + 0.5f;
+		int uniColorLocation = glGetUniformLocation(colorShaderProgram,"uniColor");
+		glUniform4f(uniColorLocation, 0.0f, greenColor, 0.0f, 1.0f);
+
+		
 		//使用VBO来进行三角形的绘制
 		glBindVertexArray(VAOS[1]);
 		glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);
