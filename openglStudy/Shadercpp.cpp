@@ -10,13 +10,30 @@ void process_input(GLFWwindow* window);
 
 //顶点着色器 使用string 表述 定义
 //gl_Position 这个值不能乱改 应该是内部定义的，否则会造成片段着色器无效的bug
+//const char* vertexShaderSource = "#version 330 core\n"
+//"layout (location = 0) in vec3 aPos;\n"
+//"layout (location = 1) in vec3 aColor;\n"
+//"out vec4 inFragColor;\n"
+//"out vec3 inTrangleColor;\n"
+//"void main()\n"
+//"{\n"
+//"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+//"inFragColor = vec4(0.0,1.0,1.0,0.5);\n"
+//"inTrangleColor =aColor;\n"
+//"}\0";
+
+
+
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec3 inTrangleColor;\n"
 "out vec4 inFragColor;\n"
 "void main()\n"
 "{\n"
 "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"inFragColor = vec4(0.0f,1.0f,1.0f,0.5f);\n"
+"inFragColor = vec4(1.0,0.0,0.0,1.0);\n"
+"inTrangleColor =aColor;\n"
 "}\0";
 
 //判断着色器 使用string 表述 定义
@@ -41,13 +58,36 @@ const char* fragmentShaderSource = "#version 330 core\n"
 //使用uniform定义color
 //使用uniform的意义是在于这样的话 可以在program中进行相关数值的设置
 //但是需要注意的是 uniform在着色器中唯一 不能有重复
-const char* colorFragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"uniform vec4 uniColor;\n"
+//const char* colorFragmentShaderSource = "#version 330 core\n"
+//"out vec4 FragColor;\n"
+//"uniform vec4 uniColor;\n"
+//"void main()\n"
+//"{\n"
+//"FragColor = uniColor;\n"
+//"}\n\0";
+
+
+
+const char* colorVertexShaderSource = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec4 testColor;\n"
+"out vec4 inFragColor;\n"
 "void main()\n"
 "{\n"
-"FragColor = uniColor;\n"
+"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"testColor = vec4(1.0,1.0,1.0,1.0);\n"
+"inFragColor = vec4(aColor,1.0);\n"
+"}\0";
+
+const char* colorFragmentShaderSource = "#version 330 core\n"
+"in vec3 inTrangleColor;\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"FragColor = vec4(inTrangleColor,1.0);\n"
 "}\n\0";
+
 
 
 int main() {
@@ -125,19 +165,6 @@ int main() {
 	}
 
 
-	//进行另一个片段着色器的定义
-	unsigned int colorFragmentShader;
-	colorFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(colorFragmentShader, 1, &colorFragmentShaderSource, NULL);
-	glCompileShader(colorFragmentShader);
-
-
-	glGetShaderiv(colorFragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(colorFragmentShader, 512, NULL, infoLog);
-		std::cout << "color fragment compile failed \n " << infoLog << std::endl;
-	}
-
 	//创建program将 顶点着色器和片段着色器进行link
 	int shaderProgram;
 	shaderProgram = glCreateProgram();
@@ -150,6 +177,38 @@ int main() {
 	if (!success) {
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 		std::cout << "program link failed \n" << infoLog << std::endl;
+	}
+
+
+
+	//对三角形顶点着色器和判断着色器进行编译
+	unsigned int colorVertexShader;
+	colorVertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(colorVertexShader, 1, &colorVertexShaderSource, NULL);
+	glCompileShader(colorVertexShader);
+
+	//检查顶点着色器编译结果
+	glGetShaderiv(colorVertexShader, GL_COMPILE_STATUS, &success);
+
+	if (!success) {
+
+		glGetShaderInfoLog(colorVertexShader, 512, NULL, infoLog);
+		std::cout << "vertext shader compile faild \n" << infoLog << std::endl;
+
+	}
+
+
+	//进行另一个片段着色器的定义
+	unsigned int colorFragmentShader;
+	colorFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(colorFragmentShader, 1, &colorFragmentShaderSource, NULL);
+	glCompileShader(colorFragmentShader);
+
+
+	glGetShaderiv(colorFragmentShader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(colorFragmentShader, 512, NULL, infoLog);
+		std::cout << "color fragment compile failed \n " << infoLog << std::endl;
 	}
 
 
@@ -172,8 +231,10 @@ int main() {
 	//已经link好后 需要删除无用的着色器
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	glDeleteShader(colorFragmentShader);
 
+	glDeleteShader(colorFragmentShader);
+	//glDeleteShader(colorVertexShader);
+	
 
 	/*****************************************************三角形顶点数组************************************************************/
 	//float vertices[] = {
@@ -219,14 +280,26 @@ int main() {
 
 	};
 
+	////三角形
+	//float trangle[] = {
+	//	//l
+	//	0.0f,0.0f,0.0f,
+	//	//r
+	//	1.0f,0.0f,0.0f,
+	//	//t
+	//	1.0f,1.0f,0.0f
+
+	//};
+
+
 	//三角形
 	float trangle[] = {
-		//l
-		0.0f,0.0f,0.0f,
-		//r
-		1.0f,0.0f,0.0f,
-		//t
-		1.0f,1.0f,0.0f
+		//l-c
+		0.0f,0.0f,0.0f, 1.0f,0.0f,0.0f,
+		//r-t
+		1.0f,0.0f,0.0f, 0.0f,1.0f,0.0f,
+		//t-t
+		1.0f,1.0f,0.0f, 0.0f,0.0f,1.0f
 
 	};
 
@@ -254,8 +327,14 @@ int main() {
 	glBindVertexArray(VAOS[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(trangle), trangle, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
+
+	//index=0 属性设置成功
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	//index=1 属性设置成功
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 
 
 	/***********************************************************不使用数组进行关于三角形的绘制***************************************************************************/
@@ -335,10 +414,10 @@ int main() {
 		//激活相关的program
 		//该program link 相关的fragmentShader ，且该shader中绑定了相关的 着色器语言
 		glUseProgram(colorShaderProgram);
-		float timeValue = glfwGetTime();
+		/*float timeValue = glfwGetTime();
 		float greenColor = sin(timeValue) / 2 + 0.5f;
 		int uniColorLocation = glGetUniformLocation(colorShaderProgram,"uniColor");
-		glUniform4f(uniColorLocation, 0.0f, greenColor, 0.0f, 1.0f);
+		glUniform4f(uniColorLocation, 0.0f, greenColor, 0.0f, 1.0f);*/
 
 		
 		//使用VBO来进行三角形的绘制
