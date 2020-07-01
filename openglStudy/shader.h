@@ -53,13 +53,85 @@ public:
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
 
+		//将str 转成char*的样式
+		const char* vShaderChars = vertexSourceCode.c_str();
+		const char* fShaderChars = fragmentSourceCode.c_str();
+
+		unsigned int vShader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vShader, 1, &vShaderChars, NULL);
+		glCompileShader(vShader);
+		checkCompileShader(vShader, "VERTEX");
+
+		unsigned int fShader = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fShader, 1, &fShaderChars, NULL);
+		glCompileShader(fShader);
+		checkCompileShader(fShader, "FRAGMENT");
+
+		programId = glCreateProgram();
+		glAttachShader(programId, vShader);
+		glAttachShader(programId, fShader);
+		glLinkProgram(programId);
+		checkCompileShader(programId, "PROGRAM");
 
 
-
+		//delete shader
+		glDeleteShader(vShader);
+		glDeleteShader(fShader);
 
 	};
 
+	void useProgram() {
+		glUseProgram(programId);
+	}
+
+	void release() {
+		glDeleteProgram(programId);
+	}
+
+	int getProgramId() {
+		return programId;
+	}
+
+	void setUniformBool(std::string name,bool value ) {
+		glUniform1i(glGetUniformLocation(programId,name.c_str()),(int)value);
+	}
+
+
+
+
+
+
+
+
 private:
+
+	void checkCompileShader(unsigned int shader, std::string type) {
+		int success;
+		char infoLog[1024];
+		//检查shader的编译	
+		if (type!="PROGRAM")
+		{
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+			if (!success) {
+				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+			}
+
+
+		//检查program的编译
+		}else{
+
+			glGetProgramiv(shader, GL_LINK_STATUS, &success);
+			if (!success) {
+				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+			}
+		}
+
+
+	}
+
 
 };
 

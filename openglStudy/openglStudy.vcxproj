@@ -150,6 +150,17 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Shadercpp.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fragment.frag" />
+    <None Include="vertex.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="openglStudy.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -19,6 +19,12 @@
     <Filter Include="Source Files\getstart\shader">
       <UniqueIdentifier>{8f579f01-4c0d-4ef0-a2b0-9d52d4d088ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\shader">
+      <UniqueIdentifier>{104f811c-6f13-4dc2-91cb-baa6aff4de9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shader">
+      <UniqueIdentifier>{be0881da-dd7e-4978-a2f2-222476a1ad9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -30,5 +36,26 @@
     <ClCompile Include="Shadercpp.cpp">
       <Filter>Source Files\getstart\shader</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shader.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fragment.frag">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+    <None Include="vertex.vert">
+      <Filter>Resource Files\shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="openglStudy.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
