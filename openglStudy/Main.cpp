@@ -106,11 +106,11 @@ int main() {
 	//三角形
 	float trangle[] = {
 		//l
-		0.0f,0.0f,0.0f,
+		-0.5f,0.5f,0.0f,
 		//r
-		1.0f,0.0f,0.0f,
+		0.0f,-0.5f,0.0f,
 		//t
-		1.0f,1.0f,0.0f
+		0.5f,0.5f,0.0f
 
 	};
 
@@ -209,12 +209,17 @@ int main() {
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		shader.useProgram();
 
+		
+
 		//使用IBO来进行绘制矩形
-		glBindVertexArray(VAOS[0]);
+		/*glBindVertexArray(VAOS[0]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
 
 
+		float timeValue = glfwGetTime();
+		float translate = sin(timeValue) / 2 + 0.5f;
+		shader.setUniformFloat("translateX", translate);
 		//使用VBO来进行三角形的绘制
 		glBindVertexArray(VAOS[1]);
 		glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);

@@ -96,9 +96,14 @@ public:
 		glUniform1i(glGetUniformLocation(programId,name.c_str()),(int)value);
 	}
 
+	void setUniformInt(std::string name, int value) {
+		glUniform1i(glGetUniformLocation(programId, name.c_str()),value);
+	}
 
 
-
+	void setUniformFloat(std::string name, float value) {
+		glUniform1f(glGetUniformLocation(programId, name.c_str()), value);
+	}
 
 
 
