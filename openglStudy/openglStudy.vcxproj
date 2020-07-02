@@ -151,6 +151,7 @@
     <ClCompile Include="Shadercpp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Download\stb-master\stb_image.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
   </ItemGroup>

@@ -25,6 +25,9 @@
     <Filter Include="Resource Files\shader">
       <UniqueIdentifier>{be0881da-dd7e-4978-a2f2-222476a1ad9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\imgload">
+      <UniqueIdentifier>{bf80677f-08c7-43e9-b0b0-04318d74b322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Download\stb-master\stb_image.h">
+      <Filter>Header Files\imgload</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
