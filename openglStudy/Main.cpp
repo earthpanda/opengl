@@ -54,15 +54,17 @@ int main() {
 	const char* fragmentPath = ".\\fragment.frag";*/
 
 	//这里很奇怪和vs有关系 它创建的不是具体的文件夹 只是虚构的文件夹，因而这里还是在同目录下
+	//FileSystem::getPath("resources/textures/awesomeface.png")
 	const char* vertextPath = ".\\vertex.vert";
 	const char* fragmentPath = ".\\fragment.frag";
 	Shader shader(vertextPath, fragmentPath);
 
-	;
+	//由于图片坐标左上角(0,0) opengl纹理左下角坐标(0,0) 因而vertical是相反的，因而 设置这个参数使之图像看起来是正的
+	stbi_set_flip_vertically_on_load(true);
 
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	unsigned int texture0;
+	glGenTextures(1, &texture0);
+	glBindTexture(GL_TEXTURE_2D, texture0);
 
 	// 为当前绑定的纹理对象设置环绕、过滤方式
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -85,6 +87,42 @@ int main() {
 
 	//释放资源
 	stbi_image_free(data);
+
+
+	unsigned int texture1;
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+
+	// 为当前绑定的纹理对象设置环绕、过滤方式
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
+
+
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // note that we set the container wrapping method to GL_CLAMP_TO_EDGE
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // set texture filtering to nearest neighbor to clearly see the texels/pixels
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	
+	data = stbi_load(".\\awesomeface.png", &width, &height, &nrChannels, 0);
+	
+	if (data) {
+		//.png 是RGBA
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+	}
+	else {
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	//释放资源
+	stbi_image_free(data);
+
 
 
 
@@ -136,11 +174,11 @@ int main() {
 	//三角形
 	float trangle[] = {
 		//l color
-		-0.5f,0.5f,0.0f,1.0f,0.0f,0.0f,0.0f,1.0f,
+		-0.5f,0.5f,0.0f,1.0f,0.0f,0.0f,0.45f,0.55f,
 		//b color
-		0.0f,-0.5f,0.0f,0.0f,1.0f,0.0f,0.5f,0.0f,
+		0.0f,-0.5f,0.0f,0.0f,1.0f,0.0f,0.5f,0.45f,
 		//r color
-		0.5f,0.5f,0.0f,0.0f,0.0f,1.0f,1.0f,1.0f
+		0.5f,0.5f,0.0f,0.0f,0.0f,1.0f,0.55f,0.55f
 
 	};
 
@@ -250,12 +288,16 @@ int main() {
 		/*glBindVertexArray(VAOS[0]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
-
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture1);
 		shader.useProgram();
 		float timeValue = glfwGetTime();
 		float translate = sin(timeValue) / 2 + 0.5f;
 		shader.setUniformFloat("translateX", translate);
+		shader.setUniformInt("texture0",0);
+		shader.setUniformInt("texture1", 1);
 		glBindVertexArray(VAOS[1]);
 		
 		//使用VBO来进行三角形的绘制
@@ -281,6 +323,7 @@ int main() {
 	glDeleteVertexArrays(2, VAOS);
 	glDeleteBuffers(2, VBOS);
 	glDeleteBuffers(1, &IBO);
+	glDeleteTextures(1,&texture0);
 	shader.release();
 
 
