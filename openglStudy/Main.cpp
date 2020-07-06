@@ -10,6 +10,9 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void process_input(GLFWwindow* window);
 
+//文件比例 1.0代表前一张透明 后一张100%
+float radio = 1.0f;
+
 
 int main() {
 
@@ -94,10 +97,10 @@ int main() {
 	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	// 为当前绑定的纹理对象设置环绕、过滤方式
-	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 
 	// set the texture wrapping parameters
@@ -107,9 +110,9 @@ int main() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // set texture filtering to nearest neighbor to clearly see the texels/pixels
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	
+
 	data = stbi_load(".\\awesomeface.png", &width, &height, &nrChannels, 0);
-	
+
 	if (data) {
 		//.png 是RGBA
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -171,14 +174,25 @@ int main() {
 
 	};
 
-	//三角形
-	float trangle[] = {
+	////三角形
+	//float trangle[] = {
+	//	//l color
+	//	-0.5f,0.5f,0.0f,1.0f,0.0f,0.0f,0.45f,0.55f,
+	//	//b color
+	//	0.0f,-0.5f,0.0f,0.0f,1.0f,0.0f,0.5f,0.45f,
+	//	//r color
+	//	0.5f,0.5f,0.0f,0.0f,0.0f,1.0f,0.55f,0.55f
+
+	//}
+
+		//三角形
+		float trangle[] = {
 		//l color
-		-0.5f,0.5f,0.0f,1.0f,0.0f,0.0f,0.45f,0.55f,
+		-0.5f,0.5f,0.0f,1.0f,0.0f,0.0f,0.0f,1.0f,
 		//b color
-		0.0f,-0.5f,0.0f,0.0f,1.0f,0.0f,0.5f,0.45f,
+		0.0f,-0.5f,0.0f,0.0f,1.0f,0.0f,0.5f,0.0f,
 		//r color
-		0.5f,0.5f,0.0f,0.0f,0.0f,1.0f,0.55f,0.55f
+		0.5f,0.5f,0.0f,0.0f,0.0f,1.0f,1.0f,1.0f
 
 	};
 
@@ -280,7 +294,7 @@ int main() {
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		//绘制填充图
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		
+
 
 
 
@@ -296,10 +310,11 @@ int main() {
 		float timeValue = glfwGetTime();
 		float translate = sin(timeValue) / 2 + 0.5f;
 		shader.setUniformFloat("translateX", translate);
-		shader.setUniformInt("texture0",0);
+		shader.setUniformInt("texture0", 0);
 		shader.setUniformInt("texture1", 1);
+		shader.setUniformFloat("radio", radio);
 		glBindVertexArray(VAOS[1]);
-		
+
 		//使用VBO来进行三角形的绘制
 		glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -323,7 +338,7 @@ int main() {
 	glDeleteVertexArrays(2, VAOS);
 	glDeleteBuffers(2, VBOS);
 	glDeleteBuffers(1, &IBO);
-	glDeleteTextures(1,&texture0);
+	glDeleteTextures(1, &texture0);
 	shader.release();
 
 
@@ -358,6 +373,28 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 */
 void process_input(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+
+		std::cout << "press down GLFW_KEY_SPACE " << std::endl;
 		glfwSetWindowShouldClose(window, true);
+		
 	}
+
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		std::cout << "press down " << std::endl;
+		radio = radio - 0.01;
+		if (radio <= 0.0f) {
+			radio = 0.0f;
+		}
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		std::cout << "press up " << std::endl;
+		radio = radio + 0.01;
+		if (radio >= 1.0f) {
+			radio = 0.0f;
+		}
+	}
+
+
+
 }
