@@ -63,7 +63,9 @@ int main() {
 	//FileSystem::getPath("resources/textures/awesomeface.png")
 	const char* vertextPath = ".\\vertex.vert";
 	const char* fragmentPath = ".\\fragment.frag";
+	//
 	Shader shader(vertextPath, fragmentPath);
+	//Shader* shader = new Shader(vertextPath, fragmentPath);
 
 	//由于图片坐标左上角(0,0) opengl纹理左下角坐标(0,0) 因而vertical是相反的，因而 设置这个参数使之图像看起来是正的
 	stbi_set_flip_vertically_on_load(true);
@@ -132,10 +134,15 @@ int main() {
 	/*********************************************************glm 矩阵相关处理***********************************************************************/
 	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans = glm::mat4(1.0f);
-	trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-	vec = trans * vec;
-	//输出210
-	std::cout << vec.x <<vec.y<< vec.z << std::endl;
+	//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+	//vec = trans * vec;
+	////输出210
+	//std::cout << vec.x <<vec.y<< vec.z << std::endl;
+	
+	trans = glm::scale(trans, glm::vec3(0.5f,0.5f,0.5f));
+	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	
+
 
 
 
@@ -325,6 +332,10 @@ int main() {
 		shader.setUniformInt("texture0", 0);
 		shader.setUniformInt("texture1", 1);
 		shader.setUniformFloat("radio", radio);
+
+		shader.setUniformMat4("transform", trans);
+
+
 		glBindVertexArray(VAOS[1]);
 
 		//使用VBO来进行三角形的绘制
