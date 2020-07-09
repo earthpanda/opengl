@@ -132,16 +132,14 @@ int main() {
 	stbi_image_free(data);
 
 	/*********************************************************glm 矩阵相关处理***********************************************************************/
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	glm::mat4 trans = glm::mat4(1.0f);
+	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+	//glm::mat4 trans = glm::mat4(1.0f);
 	//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
 	//vec = trans * vec;
 	////输出210
 	//std::cout << vec.x <<vec.y<< vec.z << std::endl;
 	
-	trans = glm::scale(trans, glm::vec3(0.5f,0.5f,0.5f));
-	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	
+
 
 
 
@@ -185,13 +183,13 @@ int main() {
 		0.0f,1.0f,0.0f
 	};
 
-	unsigned int indices[] = {
-		//第一个三角形
-		0,1,3,
-		//第二个三角形
-		1,2,3
+	//unsigned int indices[] = {
+	//	//第一个三角形
+	//	0,1,3,
+	//	//第二个三角形
+	//	1,2,3
 
-	};
+	//};
 
 	////三角形
 	//float trangle[] = {
@@ -205,7 +203,7 @@ int main() {
 	//}
 
 		//三角形
-		float trangle[] = {
+	float trangle[] = {
 		//l color
 		-0.5f,0.5f,0.0f,1.0f,0.0f,0.0f,0.0f,1.0f,
 		//b color
@@ -213,6 +211,10 @@ int main() {
 		//r color
 		0.5f,0.5f,0.0f,0.0f,0.0f,1.0f,1.0f,1.0f
 
+	};
+
+	unsigned int indices[] = {
+		0,1,2
 	};
 
 
@@ -227,24 +229,43 @@ int main() {
 	glGenBuffers(1, &IBO);
 
 	//绑定矩形
-	glBindVertexArray(VAOS[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBOS[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-	glEnableVertexAttribArray(0);
+	//glBindVertexArray(VAOS[0]);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBOS[0]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	//glEnableVertexAttribArray(0);
 
-	//绑定三角形
+	//
 	glBindVertexArray(VAOS[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(trangle), trangle, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)0);
 	glEnableVertexAttribArray(0);
+
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
 	glEnableVertexAttribArray(1);
+
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)(6 * sizeof(GL_FLOAT)));
 	glEnableVertexAttribArray(2);
+
+
+	//绑定三角形
+	//glBindVertexArray(VAOS[1]);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(trangle), trangle, GL_STATIC_DRAW);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)0);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)(6 * sizeof(GL_FLOAT)));
+	//glEnableVertexAttribArray(2);
 
 
 
@@ -291,6 +312,9 @@ int main() {
 	glBindVertexArray(0);
 
 
+	shader.useProgram();
+	shader.setUniformInt("texture0", 0);
+	shader.setUniformInt("texture1", 1);
 
 	//如果window没有被关闭 则不管进行绘制
 	while (!glfwWindowShouldClose(window)) {
@@ -325,23 +349,36 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, texture0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture1);
-		shader.useProgram();
+		
 		float timeValue = glfwGetTime();
+		std::cout << timeValue << std::endl;
 		float translate = sin(timeValue) / 2 + 0.5f;
-		shader.setUniformFloat("translateX", translate);
-		shader.setUniformInt("texture0", 0);
-		shader.setUniformInt("texture1", 1);
-		shader.setUniformFloat("radio", radio);
+		glm::mat4 trans = glm::mat4(1.0f);
 
+		trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+		trans = glm::rotate(trans, timeValue, glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+	
+		shader.setUniformFloat("translateX", translate);
+		shader.setUniformFloat("radio", radio);
 		shader.setUniformMat4("transform", trans);
 
-
 		glBindVertexArray(VAOS[1]);
-
 		//使用VBO来进行三角形的绘制
 		glBindBuffer(GL_ARRAY_BUFFER, VBOS[1]);
+		//绘制一个三角形
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
+
+		// second transformation
+	   // ---------------------
+		trans = glm::mat4(1.0f); // reset it to identity matrix
+		trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+		float scaleAmount = sin(glfwGetTime());
+		trans = glm::scale(trans, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+		shader.setUniformMat4("transform", trans);
+		//绘制第二个三角形
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 
 
@@ -399,7 +436,7 @@ void process_input(GLFWwindow* window) {
 
 		std::cout << "press down GLFW_KEY_SPACE " << std::endl;
 		glfwSetWindowShouldClose(window, true);
-		
+
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
