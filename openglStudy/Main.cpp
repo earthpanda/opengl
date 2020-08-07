@@ -7,9 +7,10 @@
 
 
 int main() {
+	OpenGlSample o;
+	o.run();
 
-	OpenGlSample s;
-	s.run();
+
 
 	
 

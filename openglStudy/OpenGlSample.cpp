@@ -1,14 +1,6 @@
 #include "OpenGlSample.h"
-#include "stb_image.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
-#include "shader.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/constants.hpp>
-#include "Texture.h"
+
+
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -16,13 +8,10 @@ void process_input(GLFWwindow* window);
 
 //文件比例 1.0代表前一张透明 后一张100%
 float radio = 1.0f;
-int screenWidth = 800;
-int screenHeight = 600;
+int screenWidth = 1920;
+int screenHeight = 1080;
 
 void OpenGlSample::run() {
-	Texture* t = new Texture;
-	t->test();
-	delete t;
 
 	//初始化glfw
 	glfwInit();
