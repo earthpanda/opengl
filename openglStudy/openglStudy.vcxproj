@@ -148,12 +148,16 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\迅雷下载\glad\src\glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="OpenGlSample.cpp" />
     <ClCompile Include="Shadercpp.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="OpenGlSample.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.frag" />
