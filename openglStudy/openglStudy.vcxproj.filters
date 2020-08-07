@@ -77,10 +77,13 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="container.jpg">
+    <Image Include="img\awesomeface.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="awesomeface.png">
+    <Image Include="img\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="img\cow_12_8.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

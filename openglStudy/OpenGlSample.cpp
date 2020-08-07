@@ -88,7 +88,7 @@ void OpenGlSample::run() {
 	//开始处理纹理 进行一个纹理的加载
 	int width, height, nrChannels;
 	//stb_image.h将会用图像的宽度、高度和颜色通道的个数填充这三个变量
-	unsigned char* data = stbi_load(".\\container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load(".\\img\\container.jpg", &width, &height, &nrChannels, 0);
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -121,7 +121,7 @@ void OpenGlSample::run() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 
-	data = stbi_load(".\\awesomeface.png", &width, &height, &nrChannels, 0);
+	data = stbi_load(".\\img\\awesomeface.png", &width, &height, &nrChannels, 0);
 
 	if (data) {
 		//.png 是RGBA
