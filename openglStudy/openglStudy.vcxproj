@@ -160,16 +160,18 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment.frag" />
-    <None Include="vertex.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="openglStudy.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\awesomeface.png" />
     <Image Include="img\container.jpg" />
     <Image Include="img\cow_12_8.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glsl\cow\cowFragment.frag" />
+    <None Include="glsl\cow\cowVertex.vert" />
+    <None Include="glsl\fragment.frag" />
+    <None Include="glsl\vertex.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

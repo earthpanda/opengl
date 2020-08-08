@@ -1,5 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "OpenGlSample.h"
+#include "Texture.h"
 
 
 
@@ -7,7 +7,7 @@
 
 
 int main() {
-	OpenGlSample o;
+	Texture o;
 	o.run();
 
 
