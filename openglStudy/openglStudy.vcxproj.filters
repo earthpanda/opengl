@@ -22,11 +22,17 @@
     <Filter Include="Header Files\shader">
       <UniqueIdentifier>{104f811c-6f13-4dc2-91cb-baa6aff4de9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\shader">
-      <UniqueIdentifier>{be0881da-dd7e-4978-a2f2-222476a1ad9a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\texture">
       <UniqueIdentifier>{c4b390a5-b401-4dc4-b52e-5e9ef75cd4af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\glsl">
+      <UniqueIdentifier>{989f25f3-7042-4c90-b564-962288848bb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\glsl\cow">
+      <UniqueIdentifier>{1c819da1-a655-4dcd-8f8b-a64b86128a0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\glsl\study">
+      <UniqueIdentifier>{70084edc-bf0f-44d7-ad94-ac355ff58ecb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,14 +42,16 @@
     <ClCompile Include="Shadercpp.cpp">
       <Filter>Source Files\getstart\shader</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OpenGlSample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
+=======
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\texture</Filter>
+>>>>>>> fe0608063c5aaa5be53950df92a39cfecec6b00c
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,14 +72,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment.frag">
-      <Filter>Resource Files\shader</Filter>
-    </None>
-    <None Include="vertex.vert">
-      <Filter>Resource Files\shader</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="openglStudy.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
@@ -86,5 +86,19 @@
     <Image Include="img\cow_12_8.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glsl\cow\cowVertex.vert">
+      <Filter>Resource Files\glsl\cow</Filter>
+    </None>
+    <None Include="glsl\fragment.frag">
+      <Filter>Resource Files\glsl\study</Filter>
+    </None>
+    <None Include="glsl\vertex.vert">
+      <Filter>Resource Files\glsl\study</Filter>
+    </None>
+    <None Include="glsl\cow\cowFragment.frag">
+      <Filter>Resource Files\glsl\cow</Filter>
+    </None>
   </ItemGroup>
 </Project>
