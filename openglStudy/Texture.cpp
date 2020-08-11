@@ -8,6 +8,18 @@ float radio = 1.0f;
 int screenWidth = 1920;
 int screenHeight = 1080;
 
+
+float picWidth = 1200.0f;
+float picHeight = 800.0f;
+
+
+float picScreenWidth = picWidth / screenWidth;
+float picScreenHeight = picHeight / screenHeight;
+
+float screenPicWidth = screenWidth / picWidth;
+float screenPicHeight = screenHeight / picHeight;
+
+
 void Texture::run() {
 
 	//≥ı ºªØglfw
@@ -212,7 +224,9 @@ void Texture::run() {
 		//float timeValue = glfwGetTime();
 		//std::cout << timeValue << std::endl;
 		//float translate = sin(timeValue) / 2 + 0.5f;
-		//glm::mat4 trans = glm::mat4(1.0f);
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::scale(trans, glm::vec3(screenPicWidth,screenPicHeight,1.0f));
+		shader.setUniformMat4("transform", trans);
 
 		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 

@@ -45,13 +45,13 @@
     <ClCompile Include="OpenGlSample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-
+<<<<<<< HEAD
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
-
+=======
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\texture</Filter>
-
+>>>>>>> fe0608063c5aaa5be53950df92a39cfecec6b00c
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
