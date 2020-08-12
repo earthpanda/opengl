@@ -109,32 +109,29 @@ void Texture::run() {
 		1.0f,1.0f,0.0f
 	};
 
-		//三角形
-	//float trangle[] = {
-	//	//lt color
-	//	-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
-	//	//lb color
-	//	-1.0f,-1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
-	//	//rb color
-	//	1.0f,-1.0f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
-	//	//rt color
-	//	1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
-
-
-	//}
-
-		//没有适应全屏的数据
-		float trangle[] = {
+		//三角形 旋转测试
+	float trangle[] = {
 		//lt color
 		-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
 		//lb color
-		-1.0f,-0.48f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+		-1.0f,-1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
 		//rb color
-		0.33f,-0.48f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
+		1.0f,-1.0f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
 		//rt color
-		0.33f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
-
+		1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
 	};
+
+		//没有适应全屏的数据
+	//	float trangle[] = {
+	//	//lt color
+	//	-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
+	//	//lb color
+	//	-1.0f,-0.48f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+	//	//rb color
+	//	0.33f,-0.48f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
+	//	//rt color
+	//	0.33f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
+	//};
 
 	unsigned int indices[] = {
 		0,1,2,
@@ -225,7 +222,7 @@ void Texture::run() {
 		//std::cout << timeValue << std::endl;
 		//float translate = sin(timeValue) / 2 + 0.5f;
 		glm::mat4 trans = glm::mat4(1.0f);
-		trans = glm::scale(trans, glm::vec3(screenPicWidth,screenPicHeight,1.0f));
+		//trans = glm::scale(trans, glm::vec3(screenPicWidth,screenPicHeight,1.0f));
 		shader.setUniformMat4("transform", trans);
 
 		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
