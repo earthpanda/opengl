@@ -116,7 +116,7 @@ $$
 
 ps: 运行程序看下效果.
 
-#### opengl中 图片的旋转 缩放 位移
+### opengl中 图片的旋转 缩放 位移
 
 我们看一下我们设置的window属性 1920 * 1080 
 
@@ -132,7 +132,7 @@ ps: 运行程序看下效果.
 glm::mat4 trans = glm::mat4(1.0f);
 trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
-trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 ```
 
 上面的程序代表一个变化矩阵，如果大家还记得上一讲的内容，还记得这样的一个公式
@@ -159,7 +159,7 @@ M3 * M2 * M1 * V =（M3 * M3 * M1） * V
 
 ![s](img/s.bmp)
 
-只有Translate
+#### 只有Translate
 
 ![](img/t.bmp)
 
@@ -169,9 +169,131 @@ M3 * M2 * M1 * V =（M3 * M3 * M1） * V
 
 
 
+#### 结论
+
+经过这三轮变化，我们做对比可以得出什么样的结论和认识？
+
+1. 对于缩放来说，它缩放的大小，glm::vec3(0.5f, 0.5f, 0.5f)，中的0.5f指的分别是 x ，y，z 分别缩放到原来的0.5f，且缩放的中心点是图片的原点
+2. 对于旋转来说，glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f)，他所旋转的中心同样是图片的原因，角度逆时针为正45度，依据右手坐标系的原则，以z轴旋转
+3. 对于位移来说，glm::vec3(1.0f, 0.0f, 0.0f)，看上去1.0f是窗口的一半，实际上也确实移动了一半。那么是不是可以下决定就是，所谓的平移就是指的是按照窗口的大小进行x/2.0f 的平移呢？
+
+为了验证这个结论是否正确，我们再次做一个程序实验
+
+```c++
+
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
+```
+
+如果按照前面的推论，现在这样的变化结果应该是 1/4的图片 充满右上角，我们拿程序实验下：
+
+![](img\st_0.5.bmp)
+
+结果和我们预想的不一样，感觉上这个0.5f 应该是图片缩放后的长度和宽度，由于所处在中心位置不太好看出来，因而我们先把图移到左上角，然后在处理。
+
+这里我们修改图片初始的坐标，然后长宽取图片的真实的长宽800*600，因而所需要的矩阵是
+
+```c++
+
+	float trangle[] = {
+		//lt color
+		-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
+		//lb color
+		-1.0f,-0.48f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+		//rb color
+		0.33f,-0.48f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
+		//rt color
+		0.33f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
+	};
+
+
+```
 
 
 
+![](img/o.bmp)
+
+
+
+我们使用相同变换方法：
+
+```c++
+trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
+```
+
+
+
+![](img\o_t_1.0x.bmp)
+
+
+
+
+
+为了，解决弄清楚，translate的含义，我们回忆下上节关于缩放的定义，以(0,0)为原点不变，x，y分别缩小相关倍数。什么意思？
+
+![](img/s_c.bmp)
+
+为了验证我们的结论，我们如果想让图片充满右上角，所需要的位移应该是(1.0f,1.0f)
+
+```c++
+
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+```
+
+结果验证，证明结果是正确的。
+
+现在我们弄明白了，先scale 在 translate的样式，那么如果我们先 translate，然后在scale 所得到的结果是什么样子的呢？
+
+该结果可以由大家思考，然后得出结论。
+
+
+
+由于先translate后，在做变换，会导致原点(0,0)的位置变化，因而在对物体做变形时，我们所采用的方式都是先 scale rotate 最后进行translate，这样是为了让分析任何问题，都基于同一个坐标系去考虑。
+
+
+
+### 添加观察矩阵
+
+```c++
+
+gl_Position = view * transform*vec4(aPos,1.0);
+
+```
+
+glsl中的position进行相关性的修改，我们可以看到物体的变换，是否两个矩阵相乘得出。那么，我们针对这种情况，我们需要 思考几个问题：
+
+1. 先在tranform中 scale，再在view中scale，和直接在transform中scale 两次的结果是一致的么？
+2. 现在tranform中translate，再在view中translate和，直接在transform中tranlate两次的结果是一致的么？
+3. 观察矩阵的中心又在哪里？
+4. 更复杂的情况是什么样子的呢？
+
+
+
+```c++
+
+	glm::mat4 trans = glm::mat4(1.0f);
+	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+    glm::mat4 viewMat = glm::mat4(1.0f);
+	viewMat = glm::scale(viewMat, glm::vec3(0.5f, 0.5f, 0.5f));
+
+```
+
+
+
+```c++
+    glm::mat4 trans = glm::mat4(1.0f);
+	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+    trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+
+
+```
+
+
+
+scale的结果一致
 
 
 
