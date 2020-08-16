@@ -222,8 +222,6 @@ void Texture::run() {
 		//std::cout << timeValue << std::endl;
 		//float translate = sin(timeValue) / 2 + 0.5f;
 		glm::mat4 trans = glm::mat4(1.0f);
-
-		
 		trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 		
 		//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
