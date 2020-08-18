@@ -226,9 +226,9 @@ void Texture::run() {
 		
 		//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
 		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-		//trans = glm::rotate(trans, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
-		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+		trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
+		//trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -1.0f));
 		//trans = glm::scale(trans, glm::vec3(screenPicWidth,screenPicHeight,1.0f));
 		//trans = glm::scale(trans, glm::vec3(0.25f, 0.25f, 0.25f));
 		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
