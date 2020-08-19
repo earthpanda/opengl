@@ -240,19 +240,19 @@ void Texture::run() {
 
 		////π€≤Ïæÿ’Û
 		glm::mat4 viewMat = glm::mat4(1.0f);
-		viewMat = glm::scale(viewMat, glm::vec3(0.1f, 1.0f, 1.0f));
-		//viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		viewMat = glm::translate(viewMat, glm::vec3(9.0f, 0.0f, 0.0f));
+		//viewMat = glm::scale(viewMat, glm::vec3(0.1f, 1.0f, 1.0f));
+		viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//viewMat = glm::translate(viewMat, glm::vec3(9.0f, 0.0f, 0.0f));
 
 		////Õ∂”∞æÿ’Û
-		//glm::mat4 projectionMat = glm::mat4(1.0f);
-		//projectionMat = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+		glm::mat4 projectionMat = glm::mat4(1.0f);
+		projectionMat = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
 
 		//shader.setUniformFloat("translateX", translate);
 		//shader.setUniformFloat("radio", radio);
 		shader.setUniformMat4("transform", trans);
 		shader.setUniformMat4("view", viewMat);
-		//shader.setUniformMat4("projection", projectionMat);
+		shader.setUniformMat4("projection", projectionMat);
 
 
 
