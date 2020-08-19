@@ -386,7 +386,9 @@ opengl中的约定(二维三维中均有对应的关系存在)
 4. 错切定义
 5. 透视定义
 
-图像变换只是这五种定义变换的排列组合
+图像变换只是这五种定义变换的排列组合，具体证明可参考资料
+
+[深度剖析计算机图形学中的旋转](https://blog.csdn.net/u013407012/article/details/103721902/)
 
 推荐算法中的矩阵定义
 
@@ -398,21 +400,326 @@ opengl中的约定(二维三维中均有对应的关系存在)
 
 
 
-### 再议opengl中的旋转 
+### 再议opengl中的旋转 与 位移
+
+之前我们所讨论的数值范围，始终是x，y的坐标变换，如果我们考虑将z轴的坐标考虑进去，那么在opengl中这样的规则是什么样子的？
+
+![](img/coordinate_systems_right_handed.png)
+
+
+
+上图所显示的是opengl的坐标体系，遵循右手坐标法则（实际示范），
+
+大拇指往右代表x轴的正方向
+
+食指往上代表y轴的正方向
+
+中指自然弯曲约90读，指向自己，代表z轴的正方向。
+
+和以往一样，讨论任何一个坐标系，我们首先需要讨论两个要素：
+
+1. 坐标系的原点坐标在哪里
+2. 三个轴的正方向在哪里
+
+请读者思考1mins后，然后以显示器作为参考要素进行作答。
+
+坐标系的原点位于，屏幕中心
+
+往右为x轴正坐标
+
+往上为y轴正坐标
+
+从屏幕往外为z轴正坐标
+
+
+
+接下来，我们思考以下三种位移的情况，请大家给出答案
+
+```c++
+//设备化坐标体系
+glm::mat4 trans = glm::mat4(1.0f);
+//屏幕上会显示什么？ -1
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
+//屏幕上会显示什么？ -2
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 1.0f));
+//屏幕上会显示什么？ -3
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -1.0f));
+
+```
+
+思考作答，然后给出结论
+
+<img src="img/xy_window.png" style="zoom:200%;" />
+
+
+
+可以看到，这三种情况，都会显示一样的图像似乎并没有什么区别。
+
+我们在尝试下以下两种情况的平移
+
+```c++
+//设备化坐标体系
+glm::mat4 trans = glm::mat4(1.0f);
+//屏幕上会显示什么？ -1
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 1.01f));
+//屏幕上会显示什么？ -2
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -1.01f));
+
+
+思考一下，会出现什么样的结果。
+    
+```
 
 
 
 
 
+<img src="img/xy_window.png" style="zoom:200%;" />
+
+我们会发现，这时候窗口什么都没有显示了，为什么呢？其实大家有没有看到，我这里连续贴了两个坐标系的图，肯定是在暗示什么的。
+
+我们看到，窗口的显示范围是[-1.0,1.0]，也就意味着在没有发生其它变换的时候，我们所能够看到的范围是[-1.0,1.0]，图上显示的是一个xy轴坐标系，它所展示的是一个平面，而我们现在探讨的是xyz的坐标系，也所展示的是一个空间，xyz的取值范围均为[-1.0,1.0],也就意味着我们所能看到的空间是一个立方体，其中原点(0,0,0)在显示屏的正中央。
+
+
+
+在获得这样的信息后，我们再来做下关于旋转的测试与实验
+
+```c++
+
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+
+```
+
+![](img/r_z_45.bmp)
 
 
 
 
 
+请大家解释下呈现出这样的图的原因
+
+```c++
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, 1.0f));
+
+
+```
+
+![](img/r_z_45_t_z_1.bmp)
+
+这样的结果，有没有和你想的不一样?仔细思考，回答这个问题，如果想不明白，我们看下下面的例子
+
+```c++
+
+
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+```
+
+![](img/r.bmp)
+
+```c++
+
+
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));
+```
+
+![](img/r_z_45_t_x_1.bmp)
+
+1. 所有的变换都是基于物体坐标系所做的变换，不能以窗口作为参考
+2. 由于xyz取值的问题，会将视图一部分截掉，看不到
 
 
 
+### 投影矩阵
+
+这里只考虑透视投影矩阵，正交投影矩阵不在本次的讨论范围之内
+
+看到这里，也许大家会说，这成像是多么的不真实，我们平时在生活中所看到的物体，都是近大远小，而所展示的demo并没有这种变化。
+
+艺术来源于生活而高于生活，同样并不是矩阵决定了世界物体的样子，而是人们根据世界本身存在的样子进行了矩阵定义, 也就是我们接下来所要讨论的投影矩阵。
+
+投影矩阵是为了展示更加真实的世界所定义出的一种矩阵，它通过特殊的算法，展示一种近大远小的真实感。
+
+我们回味下，我们创建矩阵的时候，刚开始都会执行这样一段语句
+
+```
+glm::mat4 trans = glm::mat4(1.0f);
+```
+
+它的意思是创建一个标准化的齐次坐标矩阵
+$$
+\left[
+\matrix{
+ 1.0 & 0.0 & 0.0 & 0.0 \\
+ 0.0 & 1.0 & 0.0 & 0.0\\
+ 0.0 & 0.0 & 1.0 & 0.0\\
+ 0.0 & 0.0 & 0.0 & 1.0
+ 
+}
+\right]
+$$
+
+
+ 每行代表的含义分别为 
+
+x 轴坐标
+
+y 轴坐标
+
+z 轴坐标
+
+w 轴坐标
+
+之前在第一讲中，我们讨论过3*3矩阵中和图片变换的矩阵因子，同样，在4* * 4 也存在这样的矩阵因子，这里我们只是做一个规律的展示，具体证明过程省略(具体证明涉及到大量的几何运算)。
+
+缩放因子
+
+![scale](img/scale_44.bmp)
+
+位移因子
+
+![](img/translate_44.bmp)
+
+旋转因子
+
+沿x轴
+
+![](img/x_r_44.bmp)
+
+沿y轴
+
+![](img/y_r_44.bmp)
+
+沿z轴
+
+![](img/z_r_44.bmp)
+
+沿任意轴
+
+![](img/arb_r_44.bmp)
+
+大家仔细观察，我们对于一个向量不管是做什么样的变化，始终的考虑的是向量
+$$
+\left[
+\matrix{
+ x \\
+ y \\
+ z \\
+ 1 
+}
+\right]
+$$
+其实在实际的运算过程中，我们所需要考虑的向量为
+$$
+\left[
+\matrix{
+ x \\
+ y \\
+ z \\
+ w 
+}
+\right]
+$$
+而向量的分向量w就是用于做投影效果，以实现近大远小的效果。
+
+[数学关系](http://www.songho.ca/opengl/gl_projectionmatrix.html)
+
+这个连接展示了，关w分量和最后在屏幕裁剪后的成像关系和证明。这里针对于证明不做多余的解释(其实我也不太会 - -! )
+
+在opengl中投影矩阵是这样展示的
+
+```c++
+glm::mat4 projectionMat = glm::mat4(1.0f);
+projectionMat = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+
+```
+
+![](img/perspective_frustum.png)
+
+fov : glm::radians(45.0f) 一般都定义成这样，如果想要一个末日风格的效果，该值可以大些
+
+ (float)screenWidth / (float)screenHeight: 窗口宽高比
+
+NEAR PLANE: 0.1f 
+
+FAR PLANE: 100.0f 
+
+只有在 NEAR 和 FAR 之间的物体才会被显示出来。
+
+还记得我们一开始在讨论旋转位移时所做的实验么？
+
+```c++
+glm::mat4 trans = glm::mat4(1.0f);
+//屏幕上会显示什么？ -1
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.01f));
+
+```
+
+我们知道这样的程序，我们在屏幕上面，是看不到任何东西的，如果加入透视矩阵的效果，会是什么样子的呢？
+
+```c++
+glm::mat4 trans = glm::mat4(1.0f);
+//屏幕上会显示什么？ -1
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.01f));
+
+glm::mat4 projectionMat = glm::mat4(1.0f);
+projectionMat = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+
+
+```
+
+![](img/p_0.3.bmp)
 
 
 
+```c++
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.0f));
 
+glm::mat4 projectionMat = glm::mat4(1.0f);
+projectionMat = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+
+```
+
+改变，radians 的值，进行思考和解释。
+
+问题：
+
+如果我们希望得到如下图的效果，应该如何处理？
+
+![](img/q2.bmp)
+
+
+
+```c++
+
+glm::mat4 trans = glm::mat4(1.0f);
+trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.0f));
+trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+glm::mat4 projectionMat = glm::mat4(1.0f);
+projectionMat = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+
+```
+
+到此为止，大家大致了解了opengl中的三大矩阵变换，以及相关变换细节。
+
+本次分享还有最后一点内容:
+
+#### 使用另一种观点 去阐述矩阵变换
+
+本篇前面所阐述的体系，建立于坐标点会改变的前提下，接下来的理论建立在坐标原点始终不变的前提下，两种解释均是正确的，具体怎么理解，以及何时使用哪种方式处理，需要根据具体实际情况来处理
+
+#### 如果获得变换后的最终坐标
+
+#### 下次分享主题(投票选择)
+
+1. 矩阵在图像识别中的应用
+2. opengl中的光照基础

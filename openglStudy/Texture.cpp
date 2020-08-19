@@ -225,10 +225,12 @@ void Texture::run() {
 
 		
 		//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-	/*	trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-		trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		trans = glm::translate(trans, glm::vec3(1.0f, 0.0f, 0.0f));*/
-		//trans = glm::translate(trans, glm::vec3(0.5f, 0.0f, 0.0f));
+		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+		
+		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.0f));
+		trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -1.0f));
 		//trans = glm::scale(trans, glm::vec3(screenPicWidth,screenPicHeight,1.0f));
 		//trans = glm::scale(trans, glm::vec3(0.25f, 0.25f, 0.25f));
 		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
@@ -240,9 +242,15 @@ void Texture::run() {
 
 		////π€≤Ïæÿ’Û
 		glm::mat4 viewMat = glm::mat4(1.0f);
+
 		//viewMat = glm::scale(viewMat, glm::vec3(0.1f, 1.0f, 1.0f));
 		viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		//viewMat = glm::translate(viewMat, glm::vec3(9.0f, 0.0f, 0.0f));
+
+		//viewMat = glm::scale(viewMat, glm::vec3(1.0f, 1.0f, 1.0f));
+		//viewMat = glm::rotate(viewMat, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//viewMat = glm::scale(viewMat, glm::vec3(1.0f, 1.0f, 1.0f));
+		//viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
 
 		////Õ∂”∞æÿ’Û
 		glm::mat4 projectionMat = glm::mat4(1.0f);

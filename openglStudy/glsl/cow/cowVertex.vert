@@ -15,7 +15,8 @@ void main(){
 	//triangleColor = vec4(aColor,1.0);
 	//triangleTextureCord = aTextureCord;
 
-	gl_Position = projection * view * transform*vec4(aPos,1.0);
+
+	gl_Position = projection * view * transform * vec4(aPos,1.0);
 	triangleColor =  vec4(aColor,1.0);
 	triangleTextureCord = aTextureCord;
 }
