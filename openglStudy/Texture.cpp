@@ -184,6 +184,19 @@ void Texture::run() {
 	//};
 
 
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	/****************************************************使用IBO 进行矩形的绘制**************************************************************************/
 
 
@@ -236,6 +249,9 @@ void Texture::run() {
 	shader.setUniformInt("texture0", 0);
 	shader.setUniformInt("texture1", 1);
 
+	//开启深度测试
+	glEnable(GL_DEPTH_TEST);
+
 	//如果window没有被关闭 则不管进行绘制
 	while (!glfwWindowShouldClose(window)) {
 		//监听窗口事件
@@ -244,7 +260,8 @@ void Texture::run() {
 		// render
 	  // ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		//每次窗口回调 都需要将颜色和Z缓冲清空
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 		//绘制线框图
@@ -265,41 +282,23 @@ void Texture::run() {
 
 
 		//使用VAO来进行绘制
-		glBindVertexArray(VAOS[0]);
+	
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture0);
 
 
-		//float timeValue = glfwGetTime();
+	
+
+
+		float timeValue = glfwGetTime();
 		//std::cout << timeValue << std::endl;
 		//float translate = sin(timeValue) / 2 + 0.5f;
-		glm::mat4 trans = glm::mat4(1.0f);
 
-
-		//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-
-		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.0f));
-		//trans = glm::rotate(trans, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -1.0f));
-		//trans = glm::scale(trans, glm::vec3(screenPicWidth,screenPicHeight,1.0f));
-		//trans = glm::scale(trans, glm::vec3(0.25f, 0.25f, 0.25f));
-		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-		//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-		//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-
-
-
-		////观察矩阵
+			////观察矩阵
 		glm::mat4 viewMat = glm::mat4(1.0f);
 
 		//viewMat = glm::scale(viewMat, glm::vec3(0.1f, 1.0f, 1.0f));
 		//viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//viewMat = glm::translate(viewMat, glm::vec3(9.0f, 0.0f, 0.0f));
+		viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
 
 		//viewMat = glm::scale(viewMat, glm::vec3(1.0f, 1.0f, 1.0f));
 		//viewMat = glm::rotate(viewMat, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -312,9 +311,25 @@ void Texture::run() {
 
 		//shader.setUniformFloat("translateX", translate);
 		//shader.setUniformFloat("radio", radio);
-		shader.setUniformMat4("transform", trans);
+
 		shader.setUniformMat4("view", viewMat);
 		shader.setUniformMat4("projection", projectionMat);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture0);
+		glBindVertexArray(VAOS[0]);
+		for (int i = 0; i < 10; i++)
+		{
+			glm::mat4 trans = glm::mat4(1.0f);
+			trans = glm::translate(trans, cubePositions[i]);
+			trans = glm::rotate(trans, glm::radians(45.0f)* timeValue, glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setUniformMat4("transform", trans);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		}
+	
+		
+
+	
 
 
 
