@@ -96,8 +96,8 @@ void Texture::run() {
 	//释放资源
 	stbi_image_free(data);
 
-		/****************************************************使用IBO 进行矩形的绘制 逆时针顺序 **************************************************************************/
-	//窗口坐标 -1.0 - 1.0 之间
+	/****************************************************使用IBO 进行矩形的绘制 逆时针顺序 **************************************************************************/
+//窗口坐标 -1.0 - 1.0 之间
 	float vertices[] = {
 		//lt
 		-1.0f,1.0f,0.0f,
@@ -109,34 +109,79 @@ void Texture::run() {
 		1.0f,1.0f,0.0f
 	};
 
-		//三角形 旋转测试
+	//三角形 旋转测试
+//float trangle[] = {
+//	//lt color
+//	-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
+//	//lb color
+//	-1.0f,-1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+//	//rb color
+//	1.0f,-1.0f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
+//	//rt color
+//	1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
+//};
+
+	//没有适应全屏的数据
+//	float trangle[] = {
+//	//lt color
+//	-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
+//	//lb color
+//	-1.0f,-0.48f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+//	//rb color
+//	0.33f,-0.48f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
+//	//rt color
+//	0.33f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
+//};
+
+
 	float trangle[] = {
-		//lt color
-		-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
-		//lb color
-		-1.0f,-1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
-		//rb color
-		1.0f,-1.0f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
-		//rt color
-		1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,  0.0f,0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f,  0.0f,0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f, 0.0f, 0.0f,  0.0f,1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f,  0.0f,1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,0.0f, 0.0f,  0.0f, 1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,0.0f, 0.0f,  0.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,0.0f, 0.0f,  0.0f, 1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,0.0f, 0.0f,  0.0f, 0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f, 0.0f, 0.0f,0.0f, 0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f, 0.0f, 0.0f,0.0f, 1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f, 0.0f, 0.0f,0.0f, 1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,0.0f, 0.0f,0.0f,  0.0f, 1.0f
 	};
 
-		//没有适应全屏的数据
-	//	float trangle[] = {
-	//	//lt color
-	//	-1.0f,1.0f,0.0f,0.0f,0.0f,0.0f,0.0f,1.0f,
-	//	//lb color
-	//	-1.0f,-0.48f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
-	//	//rb color
-	//	0.33f,-0.48f,0.0f,0.0f,0.0f,1.0f,1.0f,0.0f,
-	//	//rt color
-	//	0.33f,1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f
+	//unsigned int indices[] = {
+	//	0,1,2,
+	//	2,3,0
 	//};
-
-	unsigned int indices[] = {
-		0,1,2,
-		2,3,0
-	};
 
 
 	/****************************************************使用IBO 进行矩形的绘制**************************************************************************/
@@ -163,7 +208,7 @@ void Texture::run() {
 	//使用IBO进行创建和绘制
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	//使用IBO进行数据缓冲填充
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 
 	// 4. 设定顶点属性指针
@@ -179,7 +224,7 @@ void Texture::run() {
 
 
 
-		// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
@@ -211,9 +256,18 @@ void Texture::run() {
 
 
 		//使用IBO来进行绘制矩形
-		glBindVertexArray(VAOS[0]);
+	/*	glBindVertexArray(VAOS[0]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture0);*/
+
+
+
+		//使用VAO来进行绘制
+		glBindVertexArray(VAOS[0]);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture0);
 
@@ -223,12 +277,12 @@ void Texture::run() {
 		//float translate = sin(timeValue) / 2 + 0.5f;
 		glm::mat4 trans = glm::mat4(1.0f);
 
-		
+
 		//trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
 		//trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
-		
+
 		trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.0f));
-		trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//trans = glm::rotate(trans, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		//trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		//trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -1.0f));
 		//trans = glm::scale(trans, glm::vec3(screenPicWidth,screenPicHeight,1.0f));
@@ -244,7 +298,7 @@ void Texture::run() {
 		glm::mat4 viewMat = glm::mat4(1.0f);
 
 		//viewMat = glm::scale(viewMat, glm::vec3(0.1f, 1.0f, 1.0f));
-		viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		//viewMat = glm::translate(viewMat, glm::vec3(9.0f, 0.0f, 0.0f));
 
 		//viewMat = glm::scale(viewMat, glm::vec3(1.0f, 1.0f, 1.0f));
