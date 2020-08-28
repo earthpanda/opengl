@@ -298,7 +298,18 @@ void Texture::run() {
 
 		//viewMat = glm::scale(viewMat, glm::vec3(0.1f, 1.0f, 1.0f));
 		//viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+	//	viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+
+
+
+		float x = 1 * sin(timeValue);
+		float z = 1 * cos(timeValue);
+
+		viewMat = glm::translate(viewMat, glm::vec3(x, 0.0f, -z));
+
+	/*	viewMat = glm::lookAt(glm::vec3(x, 0.0f, -z),
+			glm::vec3(1.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f));*/
 
 		//viewMat = glm::scale(viewMat, glm::vec3(1.0f, 1.0f, 1.0f));
 		//viewMat = glm::rotate(viewMat, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
