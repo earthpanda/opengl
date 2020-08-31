@@ -298,18 +298,18 @@ void Texture::run() {
 
 		//viewMat = glm::scale(viewMat, glm::vec3(0.1f, 1.0f, 1.0f));
 		//viewMat = glm::rotate(viewMat, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//	viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+		//viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
 
 
 
-		float x = 1 * sin(timeValue);
-		float z = 1 * cos(timeValue);
+		float x = 10 * sin(timeValue);
+		float z = 10 * cos(timeValue);
 
-		viewMat = glm::translate(viewMat, glm::vec3(x, 0.0f, -z));
+		//viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -z));
 
-	/*	viewMat = glm::lookAt(glm::vec3(x, 0.0f, -z),
-			glm::vec3(1.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f));*/
+		viewMat = glm::lookAt(glm::vec3(x, 0.0f, z),
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f));
 
 		//viewMat = glm::scale(viewMat, glm::vec3(1.0f, 1.0f, 1.0f));
 		//viewMat = glm::rotate(viewMat, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -333,6 +333,10 @@ void Texture::run() {
 			glm::mat4 trans = glm::mat4(1.0f);
 			trans = glm::translate(trans, cubePositions[i]);
 			trans = glm::rotate(trans, glm::radians(45.0f)* timeValue, glm::vec3(1.0f, 0.3f, 0.5f));
+			//trans = glm::scale(trans, glm::vec3(2.0f, 1.0f, 1.0f));
+			//trans = glm::rotate(trans, glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			//trans = glm::translate(trans, glm::vec3(0.5f,0.0f,0.0f));
+
 			shader.setUniformMat4("transform", trans);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 
