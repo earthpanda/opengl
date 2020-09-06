@@ -19,6 +19,10 @@ float picScreenHeight = picHeight / screenHeight;
 float screenPicWidth = screenWidth / picWidth;
 float screenPicHeight = screenHeight / picHeight;
 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
 
 void Texture::run() {
 
@@ -252,6 +256,10 @@ void Texture::run() {
 	//开启深度测试
 	glEnable(GL_DEPTH_TEST);
 
+
+
+
+
 	//如果window没有被关闭 则不管进行绘制
 	while (!glfwWindowShouldClose(window)) {
 		//监听窗口事件
@@ -307,9 +315,15 @@ void Texture::run() {
 
 		//viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -z));
 
-		viewMat = glm::lookAt(glm::vec3(x, 0.0f, z),
+	
+
+		/*viewMat = glm::lookAt(glm::vec3(x, 0.0f, z),
 			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::vec3(0.0f, 1.0f, 0.0f));*/
+
+		viewMat = glm::lookAt(cameraPos,
+			cameraPos+cameraFront,
+			cameraUp);
 
 		//viewMat = glm::scale(viewMat, glm::vec3(1.0f, 1.0f, 1.0f));
 		//viewMat = glm::rotate(viewMat, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -389,30 +403,45 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 自定义的用于监听window事件的函数
 */
+//void process_input(GLFWwindow* window) {
+//	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+//
+//		std::cout << "press down GLFW_KEY_SPACE " << std::endl;
+//		glfwSetWindowShouldClose(window, true);
+//
+//	}
+//
+//	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+//		std::cout << "press down " << std::endl;
+//		radio = radio - 0.01;
+//		if (radio <= 0.0f) {
+//			radio = 0.0f;
+//		}
+//	}
+//
+//	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+//		std::cout << "press up " << std::endl;
+//		radio = radio + 0.01;
+//		if (radio >= 1.0f) {
+//			radio = 0.0f;
+//		}
+//	}
+//
+//
+//
+//}
+
+
 void process_input(GLFWwindow* window) {
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-
-		std::cout << "press down GLFW_KEY_SPACE " << std::endl;
-		glfwSetWindowShouldClose(window, true);
-
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		std::cout << "press down " << std::endl;
-		radio = radio - 0.01;
-		if (radio <= 0.0f) {
-			radio = 0.0f;
-		}
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		std::cout << "press up " << std::endl;
-		radio = radio + 0.01;
-		if (radio >= 1.0f) {
-			radio = 0.0f;
-		}
-	}
-
+	float cameraSpeed = 0.05f; // adjust accordingly
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 
 
 }
