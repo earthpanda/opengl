@@ -23,6 +23,11 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+// 当前帧与上一帧的时间差
+float deltaTime = 0.0f;
+// 上一帧的时间
+float lastFrame = 0.0f;
+
 
 void Texture::run() {
 
@@ -262,6 +267,13 @@ void Texture::run() {
 
 	//如果window没有被关闭 则不管进行绘制
 	while (!glfwWindowShouldClose(window)) {
+
+
+
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		//监听窗口事件
 		process_input(window);
 
@@ -433,7 +445,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 
 void process_input(GLFWwindow* window) {
-	float cameraSpeed = 0.05f; // adjust accordingly
+	// adjust accordingly
+	float cameraSpeed = 2.5f * deltaTime; 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPos += cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
