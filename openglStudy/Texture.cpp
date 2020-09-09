@@ -1,12 +1,32 @@
 #include "Texture.h"
 
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void process_input(GLFWwindow* window);
+//鼠标回调事件
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+//鼠标滚轮回调事件
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
 
 //文件比例 1.0代表前一张透明 后一张100%
 float radio = 1.0f;
 int screenWidth = 1920;
 int screenHeight = 1080;
+
+
+// camera
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = screenWidth / 2.0f;
+float lastY = screenHeight / 2.0f;
+bool firstMouse = true;
+
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
+
+
 
 
 float picWidth = 1200.0f;
@@ -23,10 +43,7 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-// 当前帧与上一帧的时间差
-float deltaTime = 0.0f;
-// 上一帧的时间
-float lastFrame = 0.0f;
+
 
 
 void Texture::run() {
@@ -54,6 +71,13 @@ void Texture::run() {
 	glfwMakeContextCurrent(window);
 	//添加回调函数
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	//鼠标位置回调
+	glfwSetCursorPosCallback(window, mouse_callback);
+	//鼠标滚轮回调
+	glfwSetScrollCallback(window, scroll_callback);
+
+	// tell GLFW to capture our mouse
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	//检查glad是否已经正确加载
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -402,14 +426,7 @@ void Texture::run() {
 	glfwTerminate();
 }
 
-/*
 
-opengl的回调函数，用于回调窗口的变化
-
-*/
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
 
 /*
 
@@ -444,17 +461,71 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 //}
 
 
-void process_input(GLFWwindow* window) {
-	// adjust accordingly
-	float cameraSpeed = 2.5f * deltaTime; 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraFront;
+/*
+
+opengl的回调函数，用于回调窗口的变化
+
+*/
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+void process_input(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, true);
+	}
+		
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		std::cout << "wwwwwww "<<deltaTime << std::endl;
+		camera.ProcessKeyboard(FORWARD, deltaTime);
+	}
+		
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraFront;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	{
+		std::cout << "ssssss" << std::endl;
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
+	}
+	
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+		std::cout << "aaaaaa" << std::endl;
+		camera.ProcessKeyboard(LEFT, deltaTime);
+	}
+		
+	if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		std::cout << "dddddd" << std::endl;
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+	}
+	
+}
 
 
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+	lastX = xpos;
+	lastY = ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.ProcessMouseScroll(yoffset);
 }

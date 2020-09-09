@@ -1,104 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\getstart">
-      <UniqueIdentifier>{28833d50-d029-4852-a79b-6dee9a50abe6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\getstart\shader">
-      <UniqueIdentifier>{8f579f01-4c0d-4ef0-a2b0-9d52d4d088ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\shader">
-      <UniqueIdentifier>{104f811c-6f13-4dc2-91cb-baa6aff4de9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\texture">
-      <UniqueIdentifier>{c4b390a5-b401-4dc4-b52e-5e9ef75cd4af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\glsl">
-      <UniqueIdentifier>{989f25f3-7042-4c90-b564-962288848bb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\glsl\cow">
-      <UniqueIdentifier>{1c819da1-a655-4dcd-8f8b-a64b86128a0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\glsl\study">
-      <UniqueIdentifier>{70084edc-bf0f-44d7-ad94-ac355ff58ecb}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="OpenGlSample.cpp" />
+    <ClCompile Include="Shadercpp.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shadercpp.cpp">
-      <Filter>Source Files\getstart\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenGlSample.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\texture</Filter>
-
-    </ClCompile>
+    <ClInclude Include="OpenGlSample.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="camera.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="shader.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenGlSample.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ResourceCompile Include="openglStudy.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="openglStudy.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <Image Include="img\awesomeface.png" />
+    <Image Include="img\container.jpg" />
+    <Image Include="img\cow_12_8.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="img\awesomeface.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="img\container.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="img\cow_12_8.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="glsl\cow\cowVertex.vert">
-      <Filter>Resource Files\glsl\cow</Filter>
-    </None>
-    <None Include="glsl\fragment.frag">
-      <Filter>Resource Files\glsl\study</Filter>
-    </None>
-    <None Include="glsl\vertex.vert">
-      <Filter>Resource Files\glsl\study</Filter>
-    </None>
-    <None Include="glsl\cow\cowFragment.frag">
-      <Filter>Resource Files\glsl\cow</Filter>
-    </None>
+    <None Include="glsl\cow\cowFragment.frag" />
+    <None Include="glsl\cow\cowVertex.vert" />
+    <None Include="glsl\fragment.frag" />
+    <None Include="glsl\vertex.vert" />
   </ItemGroup>
 </Project>

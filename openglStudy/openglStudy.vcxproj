@@ -153,6 +153,7 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="OpenGlSample.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
